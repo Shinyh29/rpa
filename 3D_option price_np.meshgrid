@@ -1,0 +1,130 @@
+
+from scipy import stats
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot
+%matplotlib inline
+
+
+## ---------------옵션잔존만기 계산_작동안됭?------------------------------
+
+def time_to_maturity(t0, T, y=252):
+    t0 = pd.to_datetime(t0)
+    T = pd.to_datetime(T)
+    return np.busday_count(t0, T)/ y
+
+
+
+
+
+## ---------------옵션가격 방정식(블랙숄즈)----------------------------------
+
+def call_prices(S, K, ttm, r, sigma):
+    d1 = ( np.log(S/K) + (r+sigma**2 * 0.5) * ttm) / (sigma* np.sqrt(ttm))
+    d2 = ( np.log(S/K) + (r-sigma**2 * 0.5) * ttm) / (sigma* np.sqrt(ttm))
+    val = ( S * stats.norm.cdf(d1, 0.0, 1.0)) - K * np.exp(-r * ttm)*stats.norm.cdf(d2, 0.0, 1.0)
+    return val
+
+
+
+# --------------------------------Setting-----------------------------------
+
+plt.rcParams['font.family'] = 'Malgun Gothic'
+plt.rcParams['font.size']=12
+plt.rcParams['axes.unicode_minus'] = False
+
+# ----------------------------------------------------------------------
+# ----------------------------------------------------------------------
+
+call_space = {}
+for k in K:
+    single_space = dict()
+    for s in S:
+        single_space[s] = call_prices(s, k, ttm, r, sigma)
+    call_space[k] = pd.Series(single_space)
+call_space
+
+df_call_space = pd.DataFrame(call_space)
+
+
+
+# ----------------------------------------------------------------------
+
+fig = plt.figure()
+ax = fig.add_subplot(1,1,1)
+ax.plot(df_call_space[290], label = 'k=290')
+ax.plot(df_call_space[300], label = 'k=300')
+ax.plot(df_call_space[310], label = 'k=310')
+ax.set_xlabel('기초자산 UnderLying')
+ax.set_ylabel('Calloption Price of K ')
+ax.legend(loc='best')
+'''
+Out[49]: <matplotlib.legend.Legend at 0xae285c0>
+'''
+
+# ----------------------------------------------------------------------
+K=np.arange(250, 350, 5)
+S=np.arange(200,400, 10)
+call_prices(S, K, ttm, r, sigma)
+# ----------------------------------------------------------------------
+
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
+
+
+plt.rcParams['figure.figsize']=(15,10)
+
+
+K = np.arange(250,350,5)
+S = np.arange(200, 400, 10)
+K, S = np.meshgrid(K, S)
+Z = call_prices(S, K, ttm, r, sigma)
+
+fig = plt.figure()
+ax= fig.add_subplot(111, projection='3d')
+
+surf = ax.plot_surface(S, K, Z, cmap= cm.winter, linewidth=1, antialiased=True, alpha=0.8)
+
+ax.set_xlabel(' 기초자산 ')
+ax.set_ylabel(' 행사가격(Strike)')
+ax.set_zlabel(' Call Price ')
+ax.set_title('Call Prices Surface')
+
+fig.colorbar(surf, shrink=0.5, aspect=5)
+Out[58]: <matplotlib.colorbar.Colorbar at 0xc4fa400>
+
+
+
+
+
+
+
+
+## ====================================================
+
+def call_delta(S,K,ttm,r,sigma):
+    d1= (np.log(S/K) + (r+ sigma**2 * 0.5) * ttm)/ (sigma * np.sqrt(ttm))
+    val = stats.norm.cdf(d1, 0.0, 1.0)
+    return val
+
+call_delta(S, K, 0.38, 0.02, 0.30)
+
+# --------------------------------------------------
+# -------------------3D 그래프플로팅 : 아래 동시에 
+
+
+K, S = np.meshgrid(K,S)
+Z = call_delta(S, K, 0.38, 0.02, 0.30)
+
+fig = plt.figure()
+ax= fig.add_subplot(111, projection='3d')
+surf = ax.plot_surface(S,K, Z, cmap=cm.coolwarm, linewidth=1, antialiased= True, alpha=0.8)
+
+ax.set_xlabel('기초자산 Underlying')
+ax.set_ylabel('Strike')
+ax.set_zlabel('Option_Delta')
+ax.set_title('Delta_Curve')
+fig.colorbar(surf, shrink=0.5, aspcet =5)
+
+
+# ---------------------------------------------------
