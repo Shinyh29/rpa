@@ -1,0 +1,155 @@
+# 1. Stock Index 국가별 주식 인덱스
+#(fdr, pdr[야후fn, fred]) 
+
+import pandas as pd
+list_tickers=[]
+
+import FinanceDataReader as fdr
+import pandas_datareader as pdr
+
+#####-fdr---------------------------------------------------------------------------------
+
+gsyms = ['KS11','KQ11', 'KS200', 'KQ150', 'DJI', 'IXIC', 'US500', 'VIX'
+, 'JP225', 'STOXX50E', 'CSI300', 'HSI', 'FTSE', 'DAX']
+
+# gsyms = ['코스피','코스닥', '코스피200', '코스닥150', 'Dow', 'Nasdaq', 'S&P500', 'VIX'
+# , '니케이225', '유로스탁스50E', '상하이CSI300', '항셍_홍콩HSI', '영국FTSE', '독일']
+
+
+
+
+
+#####------------------------------------------------------------------------------------
+for sym in gsyms:
+	df = fdr.DataReader(sym, '2018-01-01')
+	print(str(sym)) 
+	list_tickers.append(df)
+
+
+
+
+
+
+
+
+
+
+# 2. Sentimet Index
+
+#####------------------------------------------------------------------------------------
+"vix _국가별1번List으로 올려씀"
+#####------------------------------------------------------------------------------------
+
+
+
+# 3. Yeild_Spread ( ? bps )_fred //// 2차시도 :: fdr 한국국채, 미국국채
+#####------------------------------------------------------------------------------------
+'''
+syms = ['DGS10', 'DGS5', 'DGS2', 'DGS1MO', 'DGS3MO'] 
+print(syms) 
+yc = pdr.DataReader(syms, 'fred') 
+'''
+
+ycs = ['KR3YT=RR','KR10YT=RR','US3YT=X','US10YT=X','US30YT=X']
+for yc in ycs:
+	df = fdr.DataReader(yc, '2018-01-01')
+	print(str(yc)) 
+	list_tickers.append(df)
+
+
+
+
+
+
+# --------------------------------------------------------------
+# could specify start date with start param here 
+# Loop를 안돌려도 되넹, 그냥리스트에 티커 놓고 , 리스트명을 함수걸기
+# ---------------------------------------------------------------
+
+## names = dict(zip(syms, ['10yr', '5yr', '2yr', '1m', '3m'])) 
+
+# ------pd.DataFrame의 컬럼이름걸어주기------------------------------
+# 미국채 금리 는 전부다를 하나의 DataFrame으로 ㄱㄱㄱ ---------------
+
+##  yc = yc.rename(columns=names) 
+##  yc = yc[['10yr', '5yr', '2yr', '1m', '3m']] 
+
+##  list_tickers.append(yc)
+#####------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+# 4. FX (fdr)
+#####------------------------------------------------------------------------------------
+
+fxs = ['USD/KRW', 'USD/EUR', 'USD/JPY', 'USD/CNY','AUD/USD','BTC/USD']
+
+for fx in fxs:
+	df = fdr.DataReader(fx, '2018-01-01') 
+	print(str(fx)) 
+	list_tickers.append(df)
+
+
+
+
+
+#####-----------------------------------------------------------------------------------
+
+
+
+# 5. Commodity ['fdr'] :: 옥수수 , 콩 없음
+#####-----------------------------------------------------------------------------------
+## fred_pdr
+'''
+cmfs = ['GOLDPMGBD228NLBM','SLVPRUSD','PCOPPUSDM','DCOILWTICO','PMAIZMTUSDM','PSOYBUSDQ','MHHNGSP']
+
+# cmfs = ['Gold','Silver', '구리','Crude_Oil','옥수수Corn','콩.대두Soybeans','천연가스']
+
+for cmf in cmfs:
+	df = pdr.DataReader(cmf,'fred','2018-01-01') 
+	print(str(cmf)) 
+	list_tickers.append(df)
+'''
+cmfs = ['GC','SI','HG','CL','NG']
+# cmfs = ['Gold','Silver', '구리','Crude_Oil','천연가스']
+
+for cmf in cmfs:
+	df = fdr.DataReader(cmf,'2018-01-01') 
+	print(str(cmf)) 
+	list_tickers.append(df)
+
+
+
+#####-----------------------------------------------------------------------------------
+#####----------------df리스트_엑셀로보내기_시트별---------------------------------------
+
+
+def save_xls(list_dfs, xls_path):
+    writer = pd.ExcelWriter(xls_path)
+    for n , df in enumerate(list_dfs):
+        df = pd.DataFrame(df)
+        df.to_excel(writer, 'df_%s' %n)
+    writer.save()
+print("-------------------------------df_to_Excel___Function__-------------------") 
+
+
+print("----------------------------Go-df_to_Excel___Function__-------------------") 
+
+xls_path = 'C:\\Users\\HanaDT\\SYH_Wrap\\ww_Python\\Global_Daily_Index_monitor_파이썬\\Daily_Market_RAW.xlsx'
+save_xls(list_tickers, xls_path)
+len(list_tickers)
+
+
+'''
+옥수수, 콩 빼고 26 까지
+np.array(range(0,27))
+array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
+       17, 18, 19, 20, 21, 22, 23, 24, 25, 26])
+pd.DataFrame(np.array(range(0,28)))
+'''
+
+
