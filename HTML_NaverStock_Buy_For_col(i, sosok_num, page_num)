@@ -1,0 +1,56 @@
+import pandas as pd  # 데이터프레임을 다루는 패키지
+import datetime as dt  # 시간을 다루는 패키지
+import matplotlib.pyplot as plt  # 그래프 시각화 패키지
+import requests	#For html 소스 를 Text로
+from bs4 import BeautifulSoup as btfs
+from matplotlib import style
+
+#page_nums = ['1','2','3']
+"""
+count Number 
+page_nums.add(count)
+for page_num in page_nums:
+sosok_num({1: "Kospi", 2: "Kosdaq", 3 : "KS11_Futures"})
+i = ( 1: 개인 , 2: 외국인 , 3: 기관계 ) 
+
+"""
+
+############################################################    
+def HTML_NaverStock_Buy_For_col(i, sosok_num, page_num):
+    #sosok_num = 1,2,3
+    #page_num = 1~ [integer]
+
+    Today = dt.datetime.today().strftime("%Y%m%d")
+
+    url = "https://finance.naver.com/sise/investorDealTrendDay.nhn?bizdate=" + Today + "&sosok=0" + str(sosok_num) + "&page=" + str(page_num)
+    html = requests.get(url).text
+    soup =btfs(html,'lxml')
+    soup
+
+    for k in list(range(0,len(range(1,6)))):
+        T = soup.select('body table tr td')[11 * k + 1 + 0].text
+        T_Col = soup.select('body table tr td')[11 * k + 1 + i].text
+        print(T.replace('.','-'),T_Col)
+    # i 는 0 부터 11 사이의 값. [ 0 는 index 성격의 date ] 
+
+    for q in list(range(5,len(range(1,11)))):
+        R = soup.select('body table tr td')[11 * q + 4 + 0].text
+        R_Col = soup.select('body table tr td')[11 * q + 4 + i].text
+        print(R.replace('.','-'),R_Col)
+
+#################
+print("KOSPI")
+for w in list(range(1,len(range(2,4)))):
+        HTML_NaverStock_Buy_For_col(2,1,w)
+print("---------------KOSPI--------------------")
+
+print("KOSDAQ")
+for w in list(range(1,len(range(2,4)))):
+    HTML_NaverStock_Buy_For_col(2,2,w)
+print("---------------KOSDAQ--------------------")
+
+print("KOSPI_Futures")
+for w in list(range(1,len(range(2,4)))):
+    HTML_NaverStock_Buy_For_col(2,3,w)
+print("---------------KOSPI_Futures--------------------")
+KOSPI
