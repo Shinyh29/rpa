@@ -1,0 +1,60 @@
+## 형태소분석 
+
+import re
+import urllib
+import nltk
+from nltk.corpus import wordnet as wn
+from nltk.corpus import stopwords
+from nltk.stem.wordnet import WordNetLemmatizer
+TICKERS = 'NFLX'
+
+
+URL_TEMPLATE = "https://feeds.finance.yahoo.com/" + "rss/2.0/headline?s=%s&region=US&lang=en-US"
+
+nltk.download('stopwords')
+'''
+[nltk_data] Downloading package stopwords to
+[nltk_data]     C:\Users\HanaDT\AppData\Roaming\nltk_data...
+[nltk_data]   Unzipping corpora\stopwords.zip.
+Out[13]: True
+'''
+
+def get_article_urls(ticker):
+    '''ticker 관련주식 기사를 반환'''
+    link_pattern = re.compile(r"<link>[^<]*</link>")
+    xml_url = URL_TEMPLATE % ticker
+    xml_data = urllib.request.urlopen(xml_url).read().decode('utf-8')
+    link_hits = re.findall(link_pattern, xml_data)
+    return [h[6:-7] for h in link_hits]
+
+
+
+
+
+
+
+def get_article_content(url):
+    ''' 입력: 신문기사 url
+    출력 : 신문기사 전처리 결과 HTML받은 뒤 각문단내용을 정리'''
+    paragraph_re = re.compiler(r"<p>.*</p>")
+    tag_re = re.compile(r"<[^>*>")
+    raw_html = urllib.request.urlopen(url).read().decode('utf-8')
+    paragraphs = re.findall(paragraph_re, raw_html)
+    all_text = "".join(paragraphs)
+    content = re.sub(tag_re, "", all_text)
+    return content
+
+def text_to_bag(txt):
+    '''입력 : 문자열
+    출력 : Bow(Bag-of-words) 특징값
+    불용어 (stop words)는 무시하고 처리한당'''
+    lemmatizer = WordNetLemmatizer()
+    txt_as_ascii = txt.lower()
+    tokens = nltk.tokenize.word_tokenize(txt_as_ascii)
+    words = [t for t in tokens if t.isalpha()]
+    lemmas = [lemmatizer.lemmatize(w) for w in words]
+    stop = set(stopwords.words('english'))
+    nostops = [l for l in lemmas if l not in stop]
+    return nltk.FreqDist(nostops)
+    
+    
