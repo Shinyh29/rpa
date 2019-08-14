@@ -1,0 +1,72 @@
+mpl_png 차트저장
+import FinanceDataReader as fdr
+import pandas as pd
+
+import matplotlib.pyplot as plt
+
+plt.rcParams["font.family"] = 'nanummyeongjo'
+plt.rcParams["figure.figsize"] = (14,4)
+plt.rcParams['lines.linewidth'] = 2
+plt.rcParams["axes.grid"] = True
+
+df = fdr.DataReader('KS11','2018-01-01','2019-02-15')#(KS11 : KOSPI_Index)
+KS11= df['Close'].plot()
+KS11.to_csv('C:\\Users\\HanaDT\\●영한.Wrap\\▲▼Python\\KS11.csv')
+
+티커변수.to_csv('C:\\Users\\HanaDT\\●영한.Wrap\\▲▼Python\\' + 티커변수'.csv')
+
+
+
+plt.title('KOSPI 2010~ 오늘')
+plt.plot(KS11['Close'])
+plt.savefig('C:\\Users\\HanaDT\\●영한.Wrap\\▲▼Python\\KS_2010_Now.png')
+
+'''
+plot 과 savefig를 같이실행시켜야해
+
+plt.plot(KS11)
+Out[35]: 
+[<matplotlib.lines.Line2D at 0xd4c8110>,
+ <matplotlib.lines.Line2D at 0xd4decb0>,
+ <matplotlib.lines.Line2D at 0xd4dedb0>,
+ <matplotlib.lines.Line2D at 0xd4dee70>,
+ <matplotlib.lines.Line2D at 0xd4def30>,
+ <matplotlib.lines.Line2D at 0xd4e7030>]
+
+
+KS11
+Out[9]: 
+              Close     Open     High      Low       Volume  Change
+Date                                                               
+2010-01-04  1696.14  1681.71  1696.14  1681.71  296550000.0  0.0079
+2010-01-05  1690.62  1701.62  1702.39  1686.45  408850000.0 -0.0033
+
+*** plt.show() 는 하지말자 
+'''
+
+
+
+
+
+Index_Ticker = 'US500'
+df_Index_Ticker = fdr.DataReader(Index_Ticker,'2001')
+df_Index_Ticker.to_csv('C:\\Users\\HanaDT\\●영한.Wrap\\▲▼Python\\'+ Index_Ticker +'.csv')
+'''
+Index_Ticker :: 미국주식 , 지수 == Ticker기입     
+             :: 한국주식 , (6)자리 == 종목코드 기입
+df_Index_Ticker != Index_Ticker ::  인덱스티커 변수와는 다른 Pandas변수. 
+                    Pandas Table을 받겠다. 
+따라서 Index_Ticker :: 변수 Code만 교체 ,  해주면됨 ,
+ex) 
+import FinanceDataReader as fdr
+df_Index_Ticker = fdr.DataReader(Index_Ticker,Date_Start,Date_Finish)
+or
+df_Index_Ticker = fdr.DateReader(Index_Ticker,Date_Start)   '~ until Today()
+    
+# df_Index_Ticker :: style :::: PandasForm    
+
+Path_of_LastFolder = 'C:\\Users\\HanaDT\\●영한.Wrap\\▲▼Python\\'
+df_Index_Ticker.to_csv(Path_of_LastFolder + Index_Ticker + '.csv')
+###csv 파일로 저장하는것
+
+'''
