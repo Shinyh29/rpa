@@ -1,0 +1,131 @@
+import pandas as pd
+import FinanceDataReader as fdr
+df = fdr.DataReader('NFLX','2019')
+
+def get_macd(df, short=12, long=26, t=9):
+    # 입력받은 Input값이 pd.DataFrame임을 정의
+    df = pd.DataFrame(df)
+    # MACD 관련수식 _ 만들기
+    # 단기 12일(단기), 26일(장기) _EMA "지수이동평균"
+    ma_12 = df.Close.ewm(span=12).mean()
+    ma_26 = df.Close.ewm(span=26).mean()
+    macd = ma_12 - ma_26
+    #
+    # macd이론의 시그널==macds ?
+    macds = macd.ewm(span=9).mean()
+    # macd 이론의 오실레이터
+    macdo = macd - macds
+    ## Oscillator
+    #
+    df = df.assign(macd=macd, macds=macds, macdo=macdo).dropna()
+    #
+    #
+    return df
+
+
+df_macdplus = get_macd(df)
+
+
+## -------------------------------------------------------------------------------
+## --------------------Plotly 라이브러리 로 [동적]그래프그리기--------------------
+## -------------------------------------------------------------------------------
+
+
+df = df_macdplus
+
+#   df['Change'] = df['Close'].pct_change()
+
+
+## OSCILLATOR 의 시간에대한 미분 값이 + 인경우 Long (상승률 == df['Change'])
+## 값이 - 음인 경우 전량매도 (일간상승률 = 1, Cash)
+## 값이 모두 0인 df컬럼만들기
+
+df['Zeros'] = 0
+# 혹은 df['Zeros'] = pd.DataFrame(np.zeros(len(df)))
+
+##
+
+
+df['dt_osc'] = df['macdo']+1
+df['dt_osc'].pct_change()
+df['dt_osc'] = df['dt_osc'].pct_change()
+df['dt_osc'][0] = 0
+
+df['dt_osc_on'] = np.where(df['dt_osc'] > df['Zeros'] , df['Change']+1, 1)
+df['dt_osc_on'].cumprod().plot()
+
+
+
+
+##
+
+'''
+df['osc_on'] = np.where(df['macdo']> df['Zeros'] , df['Change']+1, 1)    #macdo 가 0 보다클때만보유
+df['osc_on'].cumprod().plot()                                            #Oscillator > 0 일때 Long<전략1>
+df['dt_osc_on'] = np.where(df['dt_osc'] > df['Zeros'] , df['Change']+1, 1)
+df['dt_osc_on'].cumprod().plot()                                         #Oscillator의 시간(1day)미분값 > 0 일때 Long<전략2>
+(df['Change']+1).cumprod().plot()                                        #100% 보유 후 가만있기
+Out[65]: <matplotlib.axes._subplots.AxesSubplot at 0xc7c1eb8>
+
+'''
+
+
+##-------------------------------------------------------------------------##
+##-------------------------------------------------------------------------##
+
+
+from plotly import tools
+import plotly.offline as offline
+import plotly.graph_objs as go
+
+
+#df['osc_on'].cumprod().plot()   #Oscillator > 0 일때 Long<전략1>
+df['dt_osc_on'] = np.where(df['dt_osc'] > df['Zeors'] , df['Change']+1, 1)
+#df['dt_osc_on'].cumprod().plot()  #Oscillator의 시간(1day)미분값 > 0 일때 Long<전략2>
+#(df['Change']+1).cumprod().plot()  #100% 보유 후 가만있기
+
+
+oscillator = go.Bar(
+x = df.index, 
+y = df['macdo'],
+name = "Oscillator")
+
+dt_osc = go.Scatter(
+x = df.index, 
+y = df['dt_osc']*25,
+name = "d(osc)/dt")
+
+
+
+Prices0 = go.Scatter(
+x = df.index, 
+y = (df['Change']+1).cumprod(),
+name = "100%Hold_전략0")
+
+Prices1 = go.Scatter(
+x = df.index, 
+y = df['osc_on'].cumprod(),
+name = "osc_on전략1")
+
+Prices2 = go.Scatter(
+x = df.index, 
+y = df['dt_osc_on'].cumprod(),
+name = "dt_osc_on전략2")
+
+
+
+
+
+
+item_name = "전략의티커이름"
+layout = go.Layout(title='{} MACD 그래프'.format(item_name))
+fig = tools.make_subplots(rows=2, cols=1, shared_xaxes = True)
+data = [Prices0, Prices1, Prices2]
+offline.init_notebook_mode(connected=True)
+
+
+for trace in data:
+    fig.append_trace(trace, 1, 1) 
+fig.append_trace(oscillator, 2, 1)
+fig.append_trace(dt_osc, 2, 1)
+offline.plot(fig)
