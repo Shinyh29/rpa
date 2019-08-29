@@ -1,0 +1,6 @@
+import os
+os.chdir("C:\\")
+for textonly in os.listdir():
+    if str(textonly).split('.')[-1] == 'txt':
+        unit_path = str(os.getcwd() + '\\' + str(textonly) )
+        print(unit_path)
