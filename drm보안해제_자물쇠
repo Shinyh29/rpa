@@ -1,0 +1,89 @@
+## drm 해제하기 
+
+import win32com.client as win32
+
+path1 = 'C:\\Users\\drm걸리는곳\\폴더주소\\'
+path1f= '파일명.xlsx'
+path11 = path1 + path1f
+
+
+xl = win32.Dispatch('Excel.Application')
+wb = xl.Workbooks.Open(path11)
+wb.Save()
+
+# 안풀리면 두번하면됨 , 세번
+# wb.SaveAs(FULLPATH) , "FULLPATH" : 다른이름으로저장 ~~~.xlsx
+xl.Quit()
+
+
+
+xl = win32.Dispatch('Excel.Application')
+wb = xl.Workbooks.Open(path11)
+wb.Save()
+
+# 안풀리면 두번하면됨 , 세번
+# wb.SaveAs(FULLPATH) , "FULLPATH" : 다른이름으로저장 ~~~.xlsx
+
+xl.Quit()
+
+
+
+
+
+# ---------------------win32com 쓰기------------------------
+
+import time
+#import win32com
+import win32com.client
+
+xl = win32com.client.Dispatch('Excel.Application')
+#time.sleep(0.5)
+xl.Visible = True
+wb = xl.Workbooks.Open('C:\\Users\\●영한.Wrap\\EquityWrapMaster.xlsm')
+#time.sleep(5)
+ws = wb.ActiveSheet
+rows = list(range(1,41))
+for row in rows:
+     print(ws.Cells(row,6).Value)
+# xl.quit()
+
+# wb.Senkeys("{O}",0)
+# wb.SendKeys("{C}",0) #계속  //// 알파벳 키보드 타이핑 가능하나? 
+
+
+x1.wb.SaveAs
+#자물쇠 해제파일 생성 & 깨지지도않음
+
+
+
+# ---------------------win32com 읽기(String)------------------------
+
+
+
+wh = ws.Range(ws.Cells(1,1),ws.Cells(4980,7))
+
+
+
+# ---------------------pd.ExcelFile().parse('Sheet1')------------------------
+
+pip install -U xlrd openpyxl
+
+import pandas as pd
+xlf = pd.ExcelFile('xlf_path.xls')
+table = xlf.parse('Sheet1')
+
+
+'''
+>> type(table) 
+>> type(dt_kq150)
+Out[214]: pandas.core.frame.DataFrame
+
+dt_kq150.head()
+Out[215]: 
+        Date    Close     Open     High      Low      Volume  Change
+0 2019-01-02  1144.41  1175.91  1179.65  1141.69  55580000.0 -0.0187
+1 2019-01-03  1114.62  1148.75  1152.25  1114.52  62400000.0 -0.0260
+2 2019-01-04  1131.90  1112.70  1131.90  1100.32  53530000.0  0.0155
+3 2019-01-07  1141.01  1148.60  1154.31  1133.45  47180000.0  0.0080
+4 2019-01-08  1130.92  1141.98  1144.87  1127.04  81910000.0 -0.0088
+'''
