@@ -1,0 +1,15 @@
+xls_pathr = 'C:\\Users\\HanaDT\\SYH_Wrap\\ww_VB\\▶▶▶▶류C_SGL\\'
+xls_f1 = 'today_Signal YH.xlsm'
+xls_f2 = 'global_index_final - 복사본.xlsm'
+xls_f3 = 'kor_sector_final - 복사본.xlsm'
+
+
+
+import win32com.client as win32
+
+xl = win32.Dispatch('Excel.Application')
+wb_open1 = xl.Workbooks.Open(xls_pathr + xls_f1)
+wb_open2 = xl.Workbooks.Open(xls_pathr + xls_f2)
+wb_open3 = xl.Workbooks.Open(xls_pathr + xls_f3 )
+
+xl.Visible = True
