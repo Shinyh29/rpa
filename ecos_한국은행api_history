@@ -1,0 +1,56 @@
+import pandas as pd
+import requests
+import json
+from pandas.io.json import json_normalize
+
+
+def query_ecos(stat_code, start_date, end_date, cycle_type="QQ"):
+    auth_key = "B9WXSKFU0Y9IN7QPP9U0/" # 발급 받은 "영한"Key 를 넣으면 더수집가능(1000개 티커)
+				# default == auth_key = "sample"
+    req_type = "json/"
+    lang = "kr/"
+    start_no = "1/"
+    end_no ="100/"
+    # end_no = "1~1000/"    이상도되는가봐
+    stat_code = stat_code + "/" 
+    cycle_type = cycle_type + "/"
+    start_date = start_date + "/"
+    end_date = end_date + "/"
+    item_no = ""
+
+    url = "http://ecos.bok.or.kr/api/StatisticSearch/" +  \
+        auth_key + req_type + lang + start_no + end_no + \
+        stat_code + cycle_type + start_date + end_date + item_no
+
+    r = requests.get(url)
+    if '해당하는 데이터가 없습니다' in r.text:
+        return None
+
+    jo = json.loads(r.text)
+    #print(jo)
+    df = json_normalize(jo['StatisticSearch']['row'])
+    df['TIME'] = df['TIME'] + '0101'
+    df['TIME'] = df['TIME'].str.replace(r'(\d{4})(\d{2})(\d{2})(.*)', r'\1-\2-\3')
+    return df
+
+
+#######################################################################################
+## 쿼리 함수 작성
+
+############# 함수_Factor 설정 하고 함수 호출 #################################################
+
+
+stat_code = "I01Y001"
+cycle_type = "MM"
+start_date = "2010"
+end_date = "2018"
+
+df = pd.DataFrame(query_ecos(stat_code, start_date, end_date, cycle_type))
+print(df)
+
+
+##############################################################################################
+
+df.head()
+# df['DATA_VALUE'].astype(float).plot(figsize=(16,4))
+df['DATA_VALUE'].astype(float).plot()
