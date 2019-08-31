@@ -1,0 +1,20 @@
+
+import FinanceDataReader as fdr
+
+df = fdr.DataReader('KS11','1999-05-31')
+df['pct']=df['Close'].pct_change()
+df['pct']=df['Change']+1
+# help(df['pct'].rolling(window=60))
+
+
+import numpy as np
+
+
+df['prod127'] = df['pct'].rolling(window=127).apply(np.prod)
+
+
+df['shift127']= df['prod127'].shift(-127)
+df['shift127pct']=df['shift127']-1
+df['shift127pct']=df['shift127pct']*100
+
+df.to_excel("C:\\prod_numpy.xlsx")
