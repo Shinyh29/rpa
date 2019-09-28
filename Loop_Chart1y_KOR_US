@@ -1,0 +1,241 @@
+def F종목코드(url종목코드):
+#  [1]     
+    import urllib.request
+    import os
+    urlkFNGuide = "http://comp.fnguide.com/SVO2/chartImg/"
+    url상품코드 = "ETF/01/A"
+    url = urlkFNGuide + url상품코드 +url종목코드 + "_12.png"   ##Korea _kFNGuide
+    print(url)
+    outpath = "C:/URL_IMG-crolling/"
+    outfile = url종목코드
+    if not os.path.isdir(outpath):
+      os.makedirs(outpath)
+    urllib.request.urlretrieve(url,outpath+outfile+".png")
+    print('DownLoad_Complete ▶',url종목코드)
+ 
+##------------------------------------------------------------------------------------------
+ 
+def kko종목코드(url종목코드):
+#  [1]     
+    import urllib.request
+    import os
+ 
+ 
+ #국가s = ["us","kr","ru","jp","in","sh","hk"]
+ #국가 = "hk"
+ 
+ #품종s = ['daumstock', 'commodity']
+    #품종 = "daumstock"
+ 
+ 
+ 
+ 
+ 
+ 
+    url다음스탁 = "https://t1.daumcdn.net/finance/chart/kr/daumstock/y/A"
+#url다음스탁g = "https://t1.daumcdn.net/finance/chart/"+국가+"/"+ 품종+"/y/mini"
+    url카카오스탁 = "https://fn-chart.dunamu.com/images/kr/stock/y/A"
+    url네이버스탁 = "https://ssl.pstatic.net/imgfinance/chart/item/area/year/"
+    urlkFNGuide = "http://comp.fnguide.com/SVO2/chartImg/"
+# url종목코드 = "122630"
+ 
+    url = url다음스탁 + url종목코드 + ".png"
+ 
+ 
+ 
+    #url상품코드 = "ETF/01/A"
+    #url = urlkFNGuide + url상품코드 +url종목코드 + "_12.png"   ##Korea_kFNGuide
+ 
+    print(url)
+    outpath = "C:/URL_IMG-crolling/"
+    outfile = url종목코드
+ 
+ 
+ 
+    if not os.path.isdir(outpath):
+     os.makedirs(outpath)
+    urllib.request.urlretrieve(url,outpath+outfile+".png")
+    print('DownLoad_Complete ▶▶▶',url종목코드)
+ 
+######################################################################
+ 
+######################################################################
+ 
+#https://fn-chart.dunamu.com/images/kr/stock/y/A + 한국종목코드[6] + .png
+#두나무 카카오스탁 1년   ////파랑  AREA
+ 
+#https://t1.daumcdn.net/finance/chart/kr/daumstock/y/A + 한국종목코드[6] + .png 
+#다음스탁 PC화면   //// 빨강 Line
+#--------------------------------------------------------------------------------------------
+ 
+ 
+def Gkko종목코드(url종목코드,국가,품종):
+#  [1]     
+    import urllib.request
+    import os
+ 
+ 
+    국가s = ["us","kr","ru","jp","in","sh","hk"]
+    #국가 = "hk"
+ 
+    품종s = ['daumstock', 'commodity']
+    #품종 = "daumstock"
+ 
+ 
+ 
+ 
+ 
+ 
+    url다음스탁 = "https://t1.daumcdn.net/finance/chart/kr/daumstock/y/A"
+    url다음스탁g = "https://t1.daumcdn.net/finance/chart/"+국가+"/"+ 품종+"/y/mini"
+    url카카오스탁 = "https://fn-chart.dunamu.com/images/kr/stock/y/A"
+    url네이버스탁 = "https://ssl.pstatic.net/imgfinance/chart/item/area/year/"
+    urlkFNGuide = "http://comp.fnguide.com/SVO2/chartImg/"
+# url종목코드 = "122630"
+ 
+    url = url다음스탁g + url종목코드 + ".png"
+ 
+ 
+ 
+    #url상품코드 = "ETF/01/A"
+    #url = urlkFNGuide + url상품코드 +url종목코드 + "_12.png"   ##Korea _kFNGuide
+ 
+    print(url)
+    outpath = "C:/URL_IMG-crolling/"
+    outfile = url종목코드
+ 
+ 
+ 
+    if not os.path.isdir(outpath):
+     os.makedirs(outpath)
+    urllib.request.urlretrieve(url,outpath+outfile+".png")
+    print('DownLoad_Complete ▶▶▶',url종목코드)
+ 
+######################################################################
+ 
+##------------------------------------------------------------------------------------------
+ 
+ 
+def US종목코드(url종목코드):
+#  [1]     
+    import urllib.request
+    import os
+ 
+    urlFINVIZ = "https://finviz.com/fut_chart.ashx?t="
+    #urlkFNGuide = "http://comp.fnguide.com/SVO2/chartImg/"
+    url = urlFINVIZ + url종목코드    ##Global _FINVIZ
+    #url = urlkFNGuide + url상품코드 +url종목코드 + "_12.png"   ##Korea _kFNGuide
+    print(url)
+    outpath = "C:/URL_IMG-crolling/"
+    outfile = url종목코드
+    if not os.path.isdir(outpath):
+      os.makedirs(outpath)
+    urllib.request.urlretrieve(url,outpath+outfile+".png")
+    print('DownLoad_Complete ▶▶',url종목코드)
+ 
+#-------------------------------------------------------------------------------------------
+ 
+ 
+ 
+[2] #-----------------------List_SET 설정___KrETF_Codes & USA Codes[Finviz]
+ 
+ETFcodes = ["252670",
+"233740",
+"182480",
+"200040",
+"269420",
+"225040",
+"091160",
+"205720",
+"245710",
+"248270",
+"133690",
+"225130",
+"200020",
+"130680",
+"102970",
+"228800",
+"152380",
+"265690",
+"261250",
+"139230",
+"098560",
+"228810",
+"143860",
+"140710",
+"245340",
+"266360",
+"243880",
+"266370",
+"238720",
+"236350",
+"204480",
+"150460",
+"105010",
+"220130",
+"122630"]
+ 
+ 
+ 
+ucodes = ['VX',
+'EX',
+'ES',
+'NQ',
+'NKD',
+'DY',
+'DX',
+'HG',
+'GC',
+'PA',
+'ZL',
+'ZS',
+'ZC',
+'CL',
+'NG',
+'SB']
+ 
+ 
+Gkkos = ["/DJI,"
+"/DJI,"
+"/COMP,"
+"/SP500,"
+"/D0011001,"
+"/E4012001,"
+"/CLc1,"
+"/GCc1,"
+"/RTSI,"
+"/SOX,"
+"/BVSP,"
+"/NI225,"
+"/BSE30,"
+"/000001,"
+"/HSCE,"
+"/FTSE100"]
+ 
+ 
+[3] # Do_Loop수행
+ 
+for ETFcode in ETFcodes:
+    kko종목코드(ETFcode)
+ #F종목코드(ETFcode)
+ #Def kko종목코드  하는곳가서 url앞부분수정 ::: Site 변경
+ 
+for ucode in ucodes:
+    US종목코드(ucode)
+ 
+ 
+#국가s = ["us","kr","ru","jp","in","sh","hk"]
+#국가 = "hk"
+#품종s = ['daumstock', 'commodity']
+#품종 = "daumstock"
+# url다음스탁g = "https://t1.daumcdn.net/finance/chart/"+국가+"/"+ 품종+"/y/mini"
+ 
+ 
+ 
+# Gkko종목코드(url종목코드,국가,품종)
+ 
+Gkko종목코드('/000001','sh','daumstock')
+Gkko종목코드("/HSCE" ,'hk','daumstock')
+Gkko종목코드 ("/D0011001" ,'kr','daumstock' )
+Gkko종목코드 ("/E4012001" ,'kr','daumstock' )
+Gkko종목코드 ("/BVSP" ,'br','daumstock')
